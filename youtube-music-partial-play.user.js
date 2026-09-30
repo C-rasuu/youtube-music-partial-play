@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YouTube Music Partial Play
 // @namespace    https://example.com/ytm-partial-play
-// @version      1.0.0
+// @version      1.0.1
 // @match        https://music.youtube.com/*
 // @grant        GM_addStyle
 // @run-at       document-start
@@ -57,21 +57,6 @@
     panelOpen: false
   };
 
-  function toNumber(value, fallback = 0) {
-    const n = Number(value);
-    return Number.isFinite(n) ? n : fallback;
-  }
-
-  function validUrl(url) {
-    if (!url || typeof url !== "string") return false;
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
   function getVideoIdFromUrl(value) {
     try {
       const url = new URL(value);
@@ -122,132 +107,144 @@
     style.id = STYLE_ID;
     style.textContent = `
       #${BUTTON_ID} {
-        position: fixed;
-        right: 18px;
-        bottom: 124px;
-        z-index: 2147483647;
-        border: none;
-        border-radius: 999px;
-        background: rgba(255, 0, 51, 0.96);
-        color: white;
-        font-weight: 800;
-        font-size: 14px;
-        padding: 12px 18px;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-        cursor: pointer;
+        position: fixed !important;
+        right: 18px !important;
+        bottom: 124px !important;
+        z-index: 2147483647 !important;
+        border: none !important;
+        border-radius: 999px !important;
+        background: rgb(255, 0, 51) !important;
+        color: white !important;
+        font-weight: 800 !important;
+        font-size: 14px !important;
+        padding: 12px 18px !important;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.35) !important;
+        cursor: pointer !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif !important;
       }
 
       #${PANEL_ID} {
-        position: fixed;
-        right: 18px;
-        bottom: 182px;
-        width: min(360px, calc(100vw - 28px));
-        max-height: 72vh;
-        background: rgba(18,18,18,0.96);
-        color: white;
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,0.12);
-        box-shadow: 0 18px 40px rgba(0,0,0,0.45);
-        overflow: hidden;
-        z-index: 2147483646;
+        position: fixed !important;
+        right: 18px !important;
+        bottom: 182px !important;
+        width: min(360px, calc(100vw - 36px)) !important;
+        max-height: 60vh !important;
+        background: rgb(18,18,18) !important;
+        color: white !important;
+        border-radius: 16px !important;
+        border: 1px solid rgba(255,255,255,0.12) !important;
+        box-shadow: 0 18px 40px rgba(0,0,0,0.45) !important;
+        overflow: hidden !important;
+        z-index: 2147483646 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif !important;
       }
 
       #${PANEL_ID}.hidden {
-        display: none;
+        display: none !important;
       }
 
       .ytm-pp-panel-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 14px 16px;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 14px 16px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+        flex-shrink: 0 !important;
       }
 
       .ytm-pp-panel-title {
-        font-size: 16px;
-        font-weight: 700;
+        font-size: 16px !important;
+        font-weight: 700 !important;
       }
 
       .ytm-pp-panel-close {
-        background: transparent;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
+        background: transparent !important;
+        border: none !important;
+        color: white !important;
+        font-size: 24px !important;
+        cursor: pointer !important;
+        padding: 0 !important;
+        width: 24px !important;
+        height: 24px !important;
       }
 
       .ytm-pp-panel-body {
-        padding: 12px;
-        max-height: calc(72vh - 54px);
-        overflow-y: auto;
+        padding: 12px !important;
+        overflow-y: auto !important;
+        flex: 1 !important;
       }
 
       .ytm-pp-list {
-        display: grid;
-        gap: 8px;
+        display: grid !important;
+        gap: 8px !important;
       }
 
       .ytm-pp-item {
-        display: grid;
-        grid-template-columns: 56px 1fr auto;
-        gap: 8px;
-        align-items: center;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 12px;
-        background: rgba(255,255,255,0.02);
-        padding: 8px;
+        display: grid !important;
+        grid-template-columns: 56px 1fr auto !important;
+        gap: 8px !important;
+        align-items: center !important;
+        border: 1px solid rgba(255,255,255,0.08) !important;
+        border-radius: 12px !important;
+        background: rgba(255,255,255,0.02) !important;
+        padding: 8px !important;
       }
 
       .ytm-pp-thumb {
-        width: 56px;
-        height: 56px;
-        object-fit: cover;
-        border-radius: 8px;
-        background: #222;
+        width: 56px !important;
+        height: 56px !important;
+        object-fit: cover !important;
+        border-radius: 8px !important;
+        background: #222 !important;
+        flex-shrink: 0 !important;
       }
 
       .ytm-pp-main {
-        min-width: 0;
+        min-width: 0 !important;
       }
 
       .ytm-pp-title {
-        font-size: 13px;
-        font-weight: 700;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        color: white !important;
       }
 
       .ytm-pp-artist {
-        font-size: 11px;
-        color: rgba(255,255,255,0.65);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 11px !important;
+        color: rgba(255,255,255,0.65) !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        margin-top: 2px !important;
       }
 
       .ytm-pp-range {
-        font-size: 11px;
-        color: #f4b4b4;
-        margin-top: 2px;
+        font-size: 11px !important;
+        color: #f4b4b4 !important;
+        margin-top: 2px !important;
       }
 
       .ytm-pp-play-btn {
-        border: none;
-        border-radius: 8px;
-        background: rgba(255,255,255,0.08);
-        color: white;
-        padding: 8px 10px;
-        cursor: pointer;
-        font-size: 12px;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        border-radius: 8px !important;
+        background: rgba(255,255,255,0.08) !important;
+        color: white !important;
+        padding: 8px 10px !important;
+        cursor: pointer !important;
+        font-size: 12px !important;
+        flex-shrink: 0 !important;
       }
 
       .ytm-pp-empty {
-        padding: 20px 8px;
-        text-align: center;
-        color: rgba(255,255,255,0.7);
-        font-size: 13px;
+        padding: 20px 8px !important;
+        text-align: center !important;
+        color: rgba(255,255,255,0.7) !important;
+        font-size: 13px !important;
       }
     `;
     document.head.appendChild(style);
@@ -277,54 +274,54 @@
       panel.innerHTML = `
         <div class="ytm-pp-panel-header">
           <div class="ytm-pp-panel-title">部分再生</div>
-          <button class="ytm-pp-panel-close" aria-label="閉じる">×</button>
+          <button class="ytm-pp-panel-close">×</button>
         </div>
         <div class="ytm-pp-panel-body">
           <div class="ytm-pp-empty">リストが空です</div>
         </div>
       `;
-      panel.querySelector(".ytm-pp-panel-close").addEventListener("click", () => {
-        panel.classList.add("hidden");
-        state.panelOpen = false;
-      });
-      return;
+    } else {
+      panel.innerHTML = `
+        <div class="ytm-pp-panel-header">
+          <div class="ytm-pp-panel-title">部分再生</div>
+          <button class="ytm-pp-panel-close">×</button>
+        </div>
+        <div class="ytm-pp-panel-body">
+          <div class="ytm-pp-list">
+            ${state.entries.map((entry, idx) => {
+              const thumb = entry.thumbnail
+                ? `<img class="ytm-pp-thumb" src="${entry.thumbnail}" alt="${entry.title}" />`
+                : `<div class="ytm-pp-thumb" style="display:flex;align-items:center;justify-content:center;background:#222;color:white;">🎵</div>`;
+
+              return `
+                <div class="ytm-pp-item">
+                  ${thumb}
+                  <div class="ytm-pp-main">
+                    <div class="ytm-pp-title">${escapeHtml(entry.title)}</div>
+                    <div class="ytm-pp-artist">${escapeHtml(entry.artist || "不明")}</div>
+                    <div class="ytm-pp-range">${formatSeconds(entry.start)}〜${formatSeconds(entry.end)}</div>
+                  </div>
+                  <button class="ytm-pp-play-btn" data-index="${idx}" type="button">再生</button>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
     }
 
-    panel.innerHTML = `
-      <div class="ytm-pp-panel-header">
-        <div class="ytm-pp-panel-title">部分再生</div>
-        <button class="ytm-pp-panel-close" aria-label="閉じる">×</button>
-      </div>
-      <div class="ytm-pp-panel-body">
-        <div class="ytm-pp-list">
-          ${state.entries.map((entry, idx) => {
-            const thumb = entry.thumbnail
-              ? `<img class="ytm-pp-thumb" src="${entry.thumbnail}" alt="${entry.title}" />`
-              : `<div class="ytm-pp-thumb" style="display:flex;align-items:center;justify-content:center;background:#222;">🎵</div>`;
+    // イベントリスナーを設定
+    const closeBtn = panel.querySelector(".ytm-pp-panel-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        togglePanel();
+      });
+    }
 
-            return `
-              <div class="ytm-pp-item">
-                ${thumb}
-                <div class="ytm-pp-main">
-                  <div class="ytm-pp-title">${escapeHtml(entry.title)}</div>
-                  <div class="ytm-pp-artist">${escapeHtml(entry.artist || "不明")}</div>
-                  <div class="ytm-pp-range">${formatSeconds(entry.start)}〜${formatSeconds(entry.end)}</div>
-                </div>
-                <button class="ytm-pp-play-btn" data-index="${idx}" type="button">再生</button>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      </div>
-    `;
-
-    panel.querySelector(".ytm-pp-panel-close").addEventListener("click", () => {
-      panel.classList.add("hidden");
-      state.panelOpen = false;
-    });
-
-    panel.querySelectorAll(".ytm-pp-play-btn").forEach((button) => {
-      button.addEventListener("click", () => {
+    const playBtns = panel.querySelectorAll(".ytm-pp-play-btn");
+    playBtns.forEach((button) => {
+      button.addEventListener("click", (e) => {
+        e.stopPropagation();
         const idx = Number(button.getAttribute("data-index"));
         playEntryAtIndex(idx);
       });
@@ -336,7 +333,11 @@
     if (!panel) return;
 
     state.panelOpen = !state.panelOpen;
-    panel.classList.toggle("hidden", !state.panelOpen);
+    if (state.panelOpen) {
+      panel.classList.remove("hidden");
+    } else {
+      panel.classList.add("hidden");
+    }
   }
 
   function getMediaElement() {
@@ -417,7 +418,9 @@
     button.id = BUTTON_ID;
     button.type = "button";
     button.textContent = "部分再生";
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
       togglePanel();
     });
     document.body.appendChild(button);
