@@ -53,7 +53,6 @@
   // 📝 ここまで: データ入力エリア
   // ========================================
 
-  const APP_ID = "ytm-partial-play-app";
   const STYLE_ID = "ytm-partial-play-style";
 
   const state = {
@@ -126,230 +125,143 @@
     const style = document.createElement("style");
     style.id = STYLE_ID;
     style.textContent = `
-      #${APP_ID} {
-        position: fixed;
-        right: 16px;
-        bottom: 78px;
-        width: min(360px, calc(100vw - 28px));
-        max-height: 72vh;
-        background: rgba(18,18,18,0.96);
-        color: #fff;
-        border: 1px solid rgba(255,255,255,0.12);
-        border-radius: 16px;
-        box-shadow: 0 18px 40px rgba(0,0,0,0.5);
-        z-index: 999999;
-        overflow: hidden;
-        font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", sans-serif;
+      .ytm-pp-playlist-container {
+        padding: 16px;
       }
 
-      #${APP_ID}.hidden { display: none; }
+      .ytm-pp-playlist-header {
+        display: flex;
+        align-items: flex-end;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
 
-      .ytm-pp-header {
-        padding: 12px 14px;
+      .ytm-pp-playlist-art {
+        width: 150px;
+        height: 150px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 8px;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid rgba(255,255,255,0.08);
-        background: rgba(255,255,255,0.02);
+        justify-content: center;
+        font-size: 48px;
       }
 
-      .ytm-pp-title {
-        font-size: 15px;
-        font-weight: 700;
+      .ytm-pp-playlist-info {
+        flex: 1;
       }
 
-      .ytm-pp-close {
-        background: transparent;
-        color: #fff;
-        border: none;
-        font-size: 20px;
-        cursor: pointer;
-        opacity: 0.8;
+      .ytm-pp-playlist-label {
+        font-size: 12px;
+        color: rgba(255,255,255,0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 8px;
       }
 
-      .ytm-pp-body {
-        padding: 12px;
-        max-height: calc(72vh - 52px);
-        overflow-y: auto;
+      .ytm-pp-playlist-title {
+        font-size: 32px;
+        font-weight: 900;
+        color: white;
+        margin-bottom: 8px;
       }
 
-      .ytm-pp-list {
-        display: grid;
+      .ytm-pp-playlist-count {
+        font-size: 14px;
+        color: rgba(255,255,255,0.7);
+      }
+
+      .ytm-pp-playlist-controls {
+        display: flex;
         gap: 8px;
+        margin-top: 16px;
       }
 
-      .ytm-pp-item {
+      .ytm-pp-playlist-btn {
+        background: #ff0033;
+        color: white;
+        border: none;
+        border-radius: 24px;
+        padding: 10px 30px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .ytm-pp-playlist-btn:hover {
+        background: #dd0031;
+      }
+
+      .ytm-pp-playlist-songs {
+        margin-top: 24px;
+      }
+
+      .ytm-pp-song-item {
         display: grid;
         grid-template-columns: 56px 1fr auto;
-        gap: 8px;
+        gap: 12px;
         align-items: center;
-        border: 1px solid rgba(255,255,255,0.08);
-        border-radius: 12px;
-        background: rgba(255,255,255,0.02);
-        padding: 8px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
       }
 
-      .ytm-pp-item img {
+      .ytm-pp-song-item:last-child {
+        border-bottom: none;
+      }
+
+      .ytm-pp-song-thumbnail {
         width: 56px;
         height: 56px;
         object-fit: cover;
-        border-radius: 8px;
+        border-radius: 4px;
         background: #222;
       }
 
-      .ytm-pp-text {
+      .ytm-pp-song-info {
         min-width: 0;
       }
 
-      .ytm-pp-item-title {
-        font-size: 13px;
-        font-weight: 700;
+      .ytm-pp-song-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: white;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .ytm-pp-item-artist {
-        font-size: 11px;
+      .ytm-pp-song-artist {
+        font-size: 12px;
         color: rgba(255,255,255,0.65);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
-      .ytm-pp-item-time {
-        font-size: 11px;
-        color: #f5b4b4;
-        margin-top: 2px;
-      }
-
-      .ytm-pp-item-btn {
-        background: rgba(255,255,255,0.08);
-        border: 1px solid rgba(255,255,255,0.1);
-        color: white;
-        border-radius: 8px;
-        padding: 7px 9px;
-        cursor: pointer;
+      .ytm-pp-song-time {
         font-size: 12px;
+        color: rgba(255,255,255,0.65);
       }
 
-      .ytm-pp-empty {
+      .ytm-pp-song-actions {
+        display: flex;
+        gap: 4px;
+      }
+
+      .ytm-pp-song-action-btn {
+        background: transparent;
+        border: none;
         color: rgba(255,255,255,0.7);
-        font-size: 13px;
-        padding: 12px 8px;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 4px 8px;
+      }
+
+      .ytm-pp-song-action-btn:hover {
+        color: white;
       }
     `;
     document.head.appendChild(style);
-  }
-
-  function createSidebarToggle() {
-    const existing = document.getElementById("ytm-partial-play-side-button");
-    if (existing) return existing;
-
-    const button = document.createElement("button");
-    button.id = "ytm-partial-play-side-button";
-    button.type = "button";
-    button.textContent = "部分再生";
-    button.style.cssText = `
-      display: block;
-      width: 100%;
-      padding: 12px 16px;
-      margin-top: 8px;
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 12px;
-      background: rgba(255,255,255,0.04);
-      color: #fff;
-      text-align: left;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-    `;
-
-    button.addEventListener("click", () => {
-      const app = document.getElementById(APP_ID);
-      if (app) app.classList.toggle("hidden");
-    });
-
-    const navCandidates = [
-      ...document.querySelectorAll("nav, aside, [role='navigation'], ytmusic-nav, ytmusic-guide-renderer")
-    ];
-
-    let target = null;
-    for (const node of navCandidates) {
-      const text = (node.textContent || "").replace(/\s+/g, "");
-      if (text.includes("ホーム") || text.includes("探索") || text.includes("ライブラリ")) {
-        target = node;
-        break;
-      }
-    }
-
-    if (target) {
-      target.appendChild(button);
-    } else {
-      document.body.appendChild(button);
-    }
-
-    return button;
-  }
-
-  function createApp() {
-    const existing = document.getElementById(APP_ID);
-    if (existing) return existing;
-
-    const app = document.createElement("div");
-    app.id = APP_ID;
-    app.className = "hidden";
-
-    app.innerHTML = `
-      <div class="ytm-pp-header">
-        <div class="ytm-pp-title">部分再生</div>
-        <button class="ytm-pp-close" type="button" aria-label="閉じる">×</button>
-      </div>
-      <div class="ytm-pp-body">
-        <div class="ytm-pp-list" id="ytm-pp-list"></div>
-      </div>
-    `;
-
-    const closeBtn = app.querySelector(".ytm-pp-close");
-    closeBtn.addEventListener("click", () => app.classList.add("hidden"));
-
-    document.body.appendChild(app);
-    return app;
-  }
-
-  function renderEntries() {
-    const list = document.getElementById("ytm-pp-list");
-    if (!list) return;
-
-    if (!state.entries.length) {
-      list.innerHTML = '<div class="ytm-pp-empty">リストが空です。スクリプト内のデータを追加してください。</div>';
-      return;
-    }
-
-    list.innerHTML = state.entries.map((entry, idx) => {
-      const image = entry.thumbnail
-        ? `<img src="${entry.thumbnail}" alt="${entry.title}" />`
-        : `<img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'><rect width='64' height='64' fill='%23222'/></svg>" />`;
-
-      return `
-        <div class="ytm-pp-item">
-          ${image}
-          <div class="ytm-pp-text">
-            <div class="ytm-pp-item-title">${escapeHtml(entry.title)}</div>
-            <div class="ytm-pp-item-artist">${escapeHtml(entry.artist)}</div>
-            <div class="ytm-pp-item-time">${formatSeconds(entry.start)}〜${formatSeconds(entry.end)}</div>
-          </div>
-          <button class="ytm-pp-item-btn" data-index="${idx}" type="button">再生</button>
-        </div>
-      `;
-    }).join("");
-
-    list.querySelectorAll(".ytm-pp-item-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const idx = Number(btn.getAttribute("data-index"));
-        playEntryAtIndex(idx);
-      });
-    });
   }
 
   function escapeHtml(str) {
@@ -440,19 +352,134 @@
     }
   }
 
+  function createPlaylistPage() {
+    const container = document.createElement("div");
+    container.className = "ytm-pp-playlist-container";
+
+    // ヘッダー
+    const header = document.createElement("div");
+    header.className = "ytm-pp-playlist-header";
+    header.innerHTML = `
+      <div class="ytm-pp-playlist-art">🎵</div>
+      <div class="ytm-pp-playlist-info">
+        <div class="ytm-pp-playlist-label">プレイリスト</div>
+        <div class="ytm-pp-playlist-title">部分再生</div>
+        <div class="ytm-pp-playlist-count">${state.entries.length}曲</div>
+        <div class="ytm-pp-playlist-controls">
+          <button class="ytm-pp-playlist-btn" id="ytm-pp-play-all">すべて再生</button>
+        </div>
+      </div>
+    `;
+
+    const playAllBtn = header.querySelector("#ytm-pp-play-all");
+    playAllBtn.addEventListener("click", () => {
+      playEntryAtIndex(0);
+    });
+
+    container.appendChild(header);
+
+    // 曲リスト
+    const songsContainer = document.createElement("div");
+    songsContainer.className = "ytm-pp-playlist-songs";
+
+    state.entries.forEach((entry, idx) => {
+      const songItem = document.createElement("div");
+      songItem.className = "ytm-pp-song-item";
+
+      const thumbnail = entry.thumbnail
+        ? `<img src="${entry.thumbnail}" class="ytm-pp-song-thumbnail" alt="${entry.title}" />`
+        : `<div class="ytm-pp-song-thumbnail" style="background: #222;">🎵</div>`;
+
+      songItem.innerHTML = `
+        ${thumbnail}
+        <div class="ytm-pp-song-info">
+          <div class="ytm-pp-song-title">${escapeHtml(entry.title)}</div>
+          <div class="ytm-pp-song-artist">${escapeHtml(entry.artist)}</div>
+        </div>
+        <div>
+          <div class="ytm-pp-song-time">${formatSeconds(entry.start)}–${formatSeconds(entry.end)}</div>
+          <div class="ytm-pp-song-actions">
+            <button class="ytm-pp-song-action-btn" data-index="${idx}" title="再生">▶</button>
+          </div>
+        </div>
+      `;
+
+      const playBtn = songItem.querySelector(".ytm-pp-song-action-btn");
+      playBtn.addEventListener("click", () => {
+        playEntryAtIndex(idx);
+      });
+
+      songsContainer.appendChild(songItem);
+    });
+
+    container.appendChild(songsContainer);
+
+    return container;
+  }
+
+  function injectPlaylistPage() {
+    // 既存の main content area を探す
+    const mainArea = document.querySelector("ytmusic-responsive-page, [role='main'], main");
+    
+    if (!mainArea) {
+      console.warn("Main content area not found");
+      return;
+    }
+
+    // 既存のコンテンツをクリア
+    const contentSections = mainArea.querySelectorAll("ytmusic-section-list-renderer, div[role='region']");
+    
+    if (contentSections.length > 0) {
+      // コンテンツセクションをクリア
+      contentSections.forEach(section => {
+        section.style.display = "none";
+      });
+    } else {
+      // フォールバック: メインのコンテンツをクリア
+      const content = mainArea.querySelector("div");
+      if (content) {
+        content.innerHTML = "";
+      }
+    }
+
+    // プレイリストページを挿入
+    const playlistPage = createPlaylistPage();
+    mainArea.appendChild(playlistPage);
+  }
+
+  function setupLibraryIntegration() {
+    // ライブラリのリンクをクリックしたときにプレイリストを表示
+    const libraryLink = document.querySelector('[href="/browse/library"], a[href*="library"]');
+    
+    if (libraryLink) {
+      libraryLink.addEventListener("click", (e) => {
+        // デフォルトの動作を少し遅延させて、ページ遷移後に注入
+        setTimeout(() => {
+          injectPlaylistPage();
+        }, 500);
+      });
+    }
+
+    // 現在のページがライブラリの場合も対応
+    if (window.location.href.includes("/browse/library")) {
+      setTimeout(() => {
+        injectPlaylistPage();
+      }, 1000);
+    }
+  }
+
   async function init() {
     await initializeEntries();
     ensureStyle();
-    createApp();
-    createSidebarToggle();
-    renderEntries();
+    setupLibraryIntegration();
 
+    // ページ遷移の監視
     const observer = new MutationObserver(() => {
-      if (!document.getElementById("ytm-partial-play-side-button")) {
-        createSidebarToggle();
-      }
-      if (!document.getElementById(APP_ID)) {
-        createApp();
+      if (window.location.href.includes("/browse/library")) {
+        const container = document.querySelector(".ytm-pp-playlist-container");
+        if (!container) {
+          injectPlaylistPage();
+        }
       }
     });
 
